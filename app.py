@@ -1,11 +1,11 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 
 app = Flask(__name__)
 
 # Mantenemos nuestra ruta original para saber que el sitio principal sigue vivo
 @app.route("/")
 def hola_mundo():
-    return "Hola Mundo! Mi sitio web está vivo!"
+    return return render_template('index.html')
 
 # ¡NUEVA RUTA! Esta es nuestra primera API de búsqueda
 @app.route("/api/search/<string:isbn>")
