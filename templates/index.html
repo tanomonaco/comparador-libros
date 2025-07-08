@@ -26,37 +26,30 @@
         </div>
 
     <script>
-        // Le decimos al código que espere a que la página cargue por completo
         document.addEventListener('DOMContentLoaded', () => {
-            
-            // Buscamos el botón y el campo de texto en el HTML
+
             const botonBuscar = document.getElementById('buscar-btn');
             const inputIsbn = document.getElementById('isbn-input');
             const divResultados = document.getElementById('resultados');
 
-            // Le decimos al botón que, cuando le hagan clic, ejecute una función
             botonBuscar.addEventListener('click', () => {
-                const isbn = inputIsbn.value; // Obtenemos el ISBN del campo de texto
-                
-                // Validamos que el usuario haya escrito algo
+                const isbn = inputIsbn.value;
+
                 if (!isbn) {
                     alert('Por favor, ingresa un ISBN.');
                     return;
                 }
 
-                divResultados.innerHTML = '<p>Buscando...</p>'; // Mostramos un mensaje de carga
+                divResultados.innerHTML = '<p>Buscando...</p>';
 
-                // Llamamos a nuestra propia API. fetch es la forma que tiene JavaScript de visitar una URL
                 fetch(`/api/search/${isbn}`)
-                    .then(response => response.json()) // Convertimos la respuesta en datos JSON
+                    .then(response => response.json())
                     .then(data => {
-                        // Limpiamos el mensaje de "Buscando..."
                         divResultados.innerHTML = ''; 
 
-                        // Creamos el HTML para mostrar los resultados
                         const tituloHtml = `<h2>${data.titulo}</h2>`;
                         const autorHtml = `<p><em>por ${data.autor}</em></p>`;
-                        
+
                         let preciosHtml = '';
                         data.precios.forEach(tienda => {
                             preciosHtml += `
@@ -68,7 +61,6 @@
                             `;
                         });
 
-                        // Juntamos todo y lo ponemos en la página
                         divResultados.innerHTML = tituloHtml + autorHtml + preciosHtml;
                     })
                     .catch(error => {
@@ -78,18 +70,6 @@
             });
         });
     </script>
-
-</body>
-</html>
-
-    <div>
-        <input type="text" id="isbn-input" placeholder="Ej: 978-0747532743">
-        <button id="buscar-btn">Buscar</button>
-    </div>
-
-    <div id="resultados">
-
-    </div>
 
 </body>
 </html>
