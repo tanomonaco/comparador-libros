@@ -5,17 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comparador de Libros</title>
     <style>
-        /* Estilos muy básicos para que no se vea tan simple */
         body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; }
         input { width: 70%; padding: 10px; font-size: 16px; }
-        button { padding: 10px 20px; font-size: 16px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
         #resultados { margin-top: 30px; border-top: 1px solid #ccc; padding-top: 20px; }
+        .libro { border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
     <h1>📚 Mi Comparador de Libros</h1>
     <p>Ingresa el ISBN de un libro para encontrar el mejor precio.</p>
+
+    <div>
+        <input type="text" id="isbn-input" placeholder="Ej: 978-0747532743">
+        <button id="buscar-btn">Buscar</button>
+    </div>
+
+    <div id="resultados">
+        </div>
+
+    <script>
+        // Le decimos al código que espere a que la página cargue por completo
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Buscamos el botón y el campo de texto en el HTML
+            const botonBuscar = document.getElementById('buscar-btn');
+            const inputIsbn = document.getElementById('isbn-input');
+            const divResultados = document.getElementById('resultados');
+
+            // Le decimos al botón que, cuando le hagan clic, ejecute una función
+            botonBuscar.addEventListener('click', () => {
+                const isbn = inputIsbn.value; // Obtenemos el ISBN del campo de texto
+                
+                // Validamos que el usuario haya escrito algo
+                if (!isbn) {
+                    alert('Por favor, ingresa un ISBN.');
+                    return;
+                }
+
+                divResultados.innerHTML = '<p>Buscando...</p>'; // Mostramos un mensaje de carga
+
+                // Llamamos a nuestra propia API. fetch es la forma que tiene JavaScript de visitar una URL
+                fetch(`/api/search/${isbn}`)
+                    .then(response => response.json()) // Convertimos la respuesta en datos JSON
+                    .then(data => {
+                        // Limpiamos el mensaje de "Buscando..."
+                        divResultados.innerHTML = ''; 
+
+                        // Creamos el HTML para mostrar los resultados
+                        const tituloHtml = `<h2>${data.titulo}</h2>`;
+                        const autorHtml = `<p><em>por ${data.autor}</em></p>`;
+                        
+                        let preciosHtml = '';
+                        data.precios.forEach(tienda => {
+                            preciosHtml += `
+                                <div class="libro">
+                                    <strong>Tienda:</strong> ${tienda.tienda}<br>
+                                    <strong>Precio:</strong> ${tienda.precio} ${tienda.moneda}<br>
+                                    <a href="${tienda.link}" target="_blank">Ver en tienda</a>
+                                </div>
+                            `;
+                        });
+
+                        // Juntamos todo y lo ponemos en la página
+                        divResultados.innerHTML = tituloHtml + autorHtml + preciosHtml;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        divResultados.innerHTML = '<p>Hubo un error al realizar la búsqueda.</p>';
+                    });
+            });
+        });
+    </script>
+
+</body>
+</html>
 
     <div>
         <input type="text" id="isbn-input" placeholder="Ej: 978-0747532743">
