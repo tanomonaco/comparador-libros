@@ -1,6 +1,14 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, redirect, request
 
 app = Flask(__name__)
+@app.before_request
+def redirect_to_custom_domain():
+    # Revisa si el host de la petición es el de onrender.com
+    if request.host == 'comparelibros-usa.onrender.com':
+        # Si es así, crea la nueva URL con el dominio personalizado
+        new_url = 'https://www.comparelibros.com' + request.full_path
+        # Y le dice al navegador que se mueva permanentemente a la nueva URL
+        return redirect(new_url, code=301)
 
 # Mantenemos nuestra ruta original para saber que el sitio principal sigue vivo
 @app.route("/")
