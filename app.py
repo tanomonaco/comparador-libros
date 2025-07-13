@@ -47,3 +47,14 @@ def search_book(isbn):
 
     # Devolvemos los datos en formato JSON, el lenguaje de las APIs
     return jsonify(dummy_book_data)
+@app.route("/privacy-policy")
+def privacy_policy():
+    return render_template("legal/privacy.html")
+
+@app.route("/terms-of-service")
+def terms_of_service():
+    return render_template("legal/terms.html")
+
+@app.route("/affiliate-disclosure")
+def affiliate_disclosure():
+    return render_template("legal/disclosure.html")
