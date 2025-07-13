@@ -58,3 +58,6 @@ def terms_of_service():
 @app.route("/affiliate-disclosure")
 def affiliate_disclosure():
     return render_template("legal/disclosure.html")
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
