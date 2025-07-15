@@ -61,3 +61,10 @@ def affiliate_disclosure():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
+@app.route("/about")
+def about():
+    return render_template("legal/about.html")
+
+@app.route("/contact")
+def contact():
+    return render_template("legal/contact.html")
