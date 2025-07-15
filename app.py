@@ -68,3 +68,17 @@ def about():
 @app.route("/contact")
 def contact():
     return render_template("legal/contact.html")
+@app.route("/blog/5-classic-books")
+def post1():
+    return render_template("blog/post1.html")
+
+@app.route("/blog/how-to-save-money-on-books")
+def post2():
+    return render_template("blog/post2.html")
+
+@app.route("/blog/best-fantasy-series-for-new-readers")
+def post3():
+    return render_template("blog/post3.html")
+@app.route("/blog")
+def blog_index():
+    return render_template("blog_index.html")
